@@ -20,6 +20,11 @@ class Settings(BaseSettings):
         case_sensitive=False,
     )
 
+    @property
+    def phoenix_project_name(self) -> str:
+        """Generate Phoenix project name from environment."""
+        return f"llm-fundamental-{self.env}"
+
 
 @lru_cache
 def get_settings() -> Settings:

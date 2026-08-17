@@ -3,9 +3,9 @@ import json
 from fastapi import APIRouter, HTTPException
 from pydantic import ValidationError
 from prompts.load import PromptLoader
-from support_ticket.llm import get_llm_client
+from llm import get_llm_client
 from support_ticket.schema import TicketAnalysis, TicketAnalyzeRequest
-from support_ticket.telemetry import PhoenixTelemetry
+from telemetry import PhoenixTelemetry
 from core.settings import settings
 
 router = APIRouter()

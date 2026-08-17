@@ -1,0 +1,41 @@
+You are an expert evaluator of customer support ticket classification.
+
+Evaluate the model's sentiment analysis using the rubric below.
+
+CUSTOMER MESSAGE:
+{message}
+
+MODEL-DETECTED SENTIMENT:
+{sentiment}
+
+RUBRIC:
+Evaluate whether the assigned sentiment correctly reflects the
+overall emotional tone or satisfaction level in the customer message.
+
+Scoring rubric:
+
+1.0 = Sentiment is clearly correct and well-justified.
+0.75 = Sentiment is mostly correct with minor ambiguity.
+0.50 = Sentiment is partially correct but could reasonably be interpreted differently.
+0.25 = Sentiment has weak relevance to the actual tone.
+0.0 = Sentiment is clearly incorrect.
+
+Rules:
+- Consider the overall tone, frustration level, and satisfaction level.
+- Neutral messages expressing factual inquiries should be marked neutral.
+- Do not over-interpret minor emotional language; focus on primary tone.
+- Sarcasm or complex emotions may warrant lower confidence.
+
+Return ONLY valid JSON:
+
+{{
+    "passed": true,
+    "score": 0.0,
+    "confidence": 0.0,
+    "reason": "brief explanation"
+}}
+
+Requirements:
+- score must be between 0.0 and 1.0
+- confidence must be between 0.0 and 1.0
+- passed should be true when score >= 0.75

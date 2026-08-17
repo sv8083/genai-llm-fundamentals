@@ -1,0 +1,43 @@
+You are an expert evaluator of customer support ticket classification.
+
+Evaluate the model's classification using the rubric below.
+
+CUSTOMER MESSAGE:
+{message}
+
+MODEL-ASSIGNED CATEGORY:
+{analysis.category}
+
+RUBRIC:
+Evaluate whether the assigned category correctly represents
+the PRIMARY issue described in the customer message.
+
+Scoring rubric:
+
+1.0 = Category clearly and directly represents the primary issue.
+0.75 = Category is mostly correct but there is minor ambiguity.
+0.50 = Category is partially relevant but another category may
+       better represent the primary issue.
+0.25 = Category has weak relevance to the customer's issue.
+0.0 = Category is clearly incorrect.
+
+Rules:
+- Evaluate the primary customer problem, not incidental details.
+- Do not penalize differences in wording if the underlying meaning
+  is equivalent.
+- If the message is ambiguous, reduce the score rather than assuming
+  information that is not present.
+
+Return ONLY valid JSON:
+
+{{
+    "passed": true,
+    "score": 0.0,
+    "confidence": 0.0,
+    "reason": "brief explanation"
+}}
+
+Requirements:
+- score must be between 0.0 and 1.0
+- confidence must be between 0.0 and 1.0
+- passed should be true when score >= 0.75

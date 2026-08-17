@@ -573,74 +573,69 @@ By the end, your system should look like this
 And alongside it
 
 ```text
-                    Evaluation
-                        ↓
-          +-------------+-------------+
-          ↓             ↓             ↓
-       Model A       Model B       Prompt V2
-          ↓             ↓             ↓
-          +-------------+-------------+
-                        ↓
-                   Comparison
+                 ┌─────────────────┐
+                 │   Test Dataset  │
+                 │  input + gold   │
+                 └────────┬────────┘
+                          ↓
+                    ┌───────────┐
+                    │    LLM    │
+                    └─────┬─────┘
+                          ↓
+                   TicketAnalysis
+                          │
+          ┌───────────────┼────────────────┐
+          ↓               ↓                ↓
+      Schema Eval    Exact Match       LLM Judge
+          │               │                │
+      JSON valid?     category?       relevance
+      types?          sentiment?       accuracy
+      fields?         intent?          clarity
+          │               │                │
+          └───────────────┼────────────────┘
+                          ↓
+                   Eval Aggregator
+                          ↓
+                ┌──────────────────┐
+                │ Overall Evaluation│
+                │ score / pass rate │
+                └──────────────────┘
+                          ↓
+                     Phoenix
+                  traces + metrics
+                  ┌─────────────────┐
+                  │   Test Dataset  │
+                  │  input + gold   │
+                  └────────┬────────┘
+                           ↓
+                    ┌───────────┐
+                    │    LLM    │
+                    └─────┬─────┘
+                          ↓
+                   TicketAnalysis
+                          │
+          ┌───────────────┼────────────────┐
+          ↓               ↓                ↓
+      Schema Eval    Exact Match       LLM Judge
+          │               │                │
+      JSON valid?     category?       relevance
+      types?          sentiment?       accuracy
+      fields?         intent?          clarity
+          │               │                │
+          └───────────────┼────────────────┘
+                          ↓
+                   Eval Aggregator
+                          ↓
+                ┌──────────────────┐
+                │ Overall Evaluation│
+                │ score / pass rate │
+                └──────────────────┘
+                          ↓
+                     Phoenix
+                  traces + metrics
 ```
 
 ---
-
-# What I specifically DON'T want you to add yet
-
-Keep these **out of this project**.
-
-```text
-❌ RAG
-❌ Vector database
-❌ Embeddings for retrieval
-❌ Agents
-❌ MCP
-❌ Tool calling
-❌ Long term memory
-❌ Multi agent
-❌ Guardrails
-❌ AI security
-❌ Governance
-❌ Complex observability
-❌ Fine tuning
-```
-
-We'll build those into later projects.
-
-That way, each project corresponds to a section of your interview preparation rather than creating one giant project where you don't understand which component is doing what.
-
----
-
-# Why I like this project for you
-
-The most valuable part isn't the API.
-
-It's that you'll be able to **demonstrate the concepts we just studied experimentally**.
-
-By the end, you should be able to explain
-
-```text
-Why did this model produce this output
-
-What happens when temperature changes
-
-What happens when Top P changes
-
-Why did the model hallucinate
-
-Why did Pydantic reject the output
-
-Why did the retry happen
-
-Why is Model A better than Model B
-
-Why is Prompt V2 better than Prompt V1
-
-Why can't we trust the LLM output directly
-```
-
-Those are exactly the kinds of questions that turn theoretical interview preparation into **actual engineering understanding**.
 
 ### Recommended next step
 
@@ -664,5 +659,3 @@ Temperature → Top P → Model comparison
 M5
 Evaluation dataset → Retry → Prompt versioning
 ```
-
-Once you've built M1 through M5, you'll have a small but genuinely useful **LLM application engineering project** that covers the entire LLM Fundamentals section without prematurely mixing in RAG or agent architecture.
