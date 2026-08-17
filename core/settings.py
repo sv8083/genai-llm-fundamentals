@@ -7,8 +7,12 @@ class Settings(BaseSettings):
     environment: str = "development"
     debug: bool = False
     api_v1_prefix: str = "/api/v1"
+    env: str = "local"  # Environment for Phoenix project naming
     ollama_base_url: str = "http://localhost:11434"
-    ollama_model: str = "gemma4:e4b"
+    ollama_model: str = "qwen2.5:7b"
+    phoenix_otlp_endpoint: str = "http://localhost:6006/v1/traces"
+    ollama_temperature: float = 0.7
+    ollama_top_p: float = 0.9
 
     model_config = SettingsConfigDict(
         env_file=".env",
