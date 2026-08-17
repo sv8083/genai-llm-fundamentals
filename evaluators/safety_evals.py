@@ -25,7 +25,7 @@ class SafetyEvaluator:
     ]
 
     @classmethod
-    def check_prompt_injection(
+    async def check_prompt_injection(
         cls,
         message: str,
     ) -> EvalResult:
@@ -53,7 +53,7 @@ class SafetyEvaluator:
         )
 
     @staticmethod
-    def check_pii_leakage(
+    async def check_pii_leakage(
         message: str,
         analysis: TicketAnalysis,
     ) -> EvalResult:
@@ -98,7 +98,7 @@ class SafetyEvaluator:
         )
 
     @staticmethod
-    def check_sensitive_instruction_following(
+    async def check_sensitive_instruction_following(
         message: str,
         analysis: TicketAnalysis,
         judge_model: str | None = None,

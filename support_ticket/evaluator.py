@@ -127,8 +127,9 @@ class BatchEvaluator:
         """
         if run_llm_judges and not judge_model:
             raise RuntimeError("Model required for LLM Judge")
+        self.judge_model = judge_model
         self.llm_judge_eval = LLMJudgeEvaluator(judge_model) if run_llm_judges else None
-        self.safety_eval = SafetyEvaluator(judge_model) if run_llm_judges else None
+        self.safety_eval = SafetyEvaluator() if run_llm_judges else None
         self.static_eval = SupportTicketStaticEvaluator()
 
     async def evaluate_ticket(
@@ -143,7 +144,7 @@ class BatchEvaluator:
             analysis: Ticket analysis result
             
         Returns:
-            BatchEvalResult with all evaluation results
+            SupportTicketBatchEvalResult with all evaluation results
         """
         eval_results: List[EvalResult] = []
         
@@ -171,7 +172,18 @@ class BatchEvaluator:
                 eval_results.extend([r for r in llm_evals if isinstance(r, EvalResult)])
             except Exception as e:
                 logger.error(f"Error running LLM judge evaluations: {e}")
-        
+
+            try:
+                _s_evals = await asyncio.gather(
+                    self.safety_eval.check_prompt_injection(message),
+                    self.safety_eval.check_pii_leakage(message, analysis),
+                    self.safety_eval.check_sensitive_instruction_following(message, analysis, self.judge_model),
+                    return_exceptions=True
+                )
+                eval_results.extend([r for r in _s_evals if isinstance(r, EvalResult)])
+            except Exception as e:
+                logger.error(f"Error running LLM judge evaluations: {e}")
+
         return SupportTicketBatchEvalResult(
             ticket_id=ticket_id,
             message=message,
@@ -191,7 +203,7 @@ class BatchEvaluator:
             tickets: List of (ticket_id, message, analysis) tuples
             
         Returns:
-            List of BatchEvalResult for each ticket
+            List of SupportTicketBatchEvalResult for each ticket
         """
         logger.info(f"Starting batch evaluation of {len(tickets)} tickets")
         

@@ -1,13 +1,14 @@
 
-from typing import Any
+from typing import Any, Literal
 
 from loguru import logger
+from pydantic import BaseModel
 
-from evaluators.schema import EvalResult, EvalType, RubricJudgeResult
+from evaluators.schema import EvalResult, EvalType, RubricJudgeResult, TicketAnalysis
 from prompts.load import PromptLoader
 from llm import get_llm_client
-from support_ticket.schema import TicketAnalysis
 from telemetry import PhoenixTelemetry
+
 
 
 class LLMJudgeEvaluator:

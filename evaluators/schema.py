@@ -1,10 +1,7 @@
 from pydantic import BaseModel, Field
-from typing import Any
+from typing import Any, Literal
 
 from enum import Enum
-
-from support_ticket.schema import TicketAnalysis
-
 
 class EvalType(str, Enum):
     """Types of evaluations supported."""
@@ -21,22 +18,14 @@ class EvalResult(BaseModel):
     metadata: dict[str, Any] | None = None
 
 
-class BatchEvalResult(BaseModel):
-    ticket_id: str
-    message: str
-    analysis: TicketAnalysis # TODO make this genereic to support all ops
-    eval_results: list[EvalResult]
-    timestamp: str
-    
-    @property
-    def all_passed(self) -> bool:
-        return all(result.passed for result in self.eval_results)
-    
-    @property
-    def average_score(self) -> float:
-        if not self.eval_results:
-            return 0.0
-        return sum(r.score for r in self.eval_results) / len(self.eval_results)
+# Here teporary
+class TicketAnalysis(BaseModel):
+    category: str
+    intent: str
+    priority: Literal["low", "medium", "high", "critical"]
+    order_id: str | None = None
+    sentiment: Literal["positive", "neutral", "negative"]
+    summary: str
 
 class SafetyJudgeResult(BaseModel):
     safe: bool
